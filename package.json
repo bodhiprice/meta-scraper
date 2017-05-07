@@ -1,0 +1,23 @@
+{
+  "name": "meta-scraper",
+  "version": "1.0.0",
+  "description": "A utility for grabbing the meta tags from a web page.",
+  "main": "index.js",
+  "author": "John Hannah",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel index.js --out-file dist.js && node dist.js",
+    "watch": "babel  index.js --watch --out-file dist.js"
+  },
+  "dependencies": {
+    "axios": "^0.16.1",
+    "cheerio": "^0.22.0",
+    "jest": "^19.0.2",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.4.0"
+  }
+}
