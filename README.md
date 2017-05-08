@@ -10,7 +10,6 @@ npm install meta-scraper --save
 There are three methods available and they each return a promise that once resolved, provides an object that contains a given page's meta tags.
 
 ### meta(url)
-
 **url**
 
 Type: `string`
@@ -71,7 +70,7 @@ getOpenGraph.then(function(data) {
 ```
 Note that the "meta" property is no longer there and the tag names are the property names.
 
-The third method, `twitter` is the same as `og` except it returns the Twitter tags.
+The third method, `twitter` is the same as `og` except it only returns the Twitter tags.
 
 **Errors**
 

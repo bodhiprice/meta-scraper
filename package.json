@@ -20,7 +20,8 @@
   ],
   "scripts": {
     "build": "babel src -d build",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "axios": "^0.16.1",

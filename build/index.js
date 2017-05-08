@@ -19,6 +19,10 @@ var meta = exports.meta = function meta(url) {
   // Get the specified URL
   return (0, _axios2.default)(url).then(function (data) {
     try {
+      // Make sure we got a valid response
+      if (data.response === 'undefined') {
+        return { error: true, errorMessage: 'Did not receive a valid response. Please check URL and try again.' };
+      }
       // Load the return data into cheerio.
       var $ = _cheerio2.default.load(data.data);
       // Filter head tags so that we just have "meta".
@@ -32,7 +36,8 @@ var meta = exports.meta = function meta(url) {
         }
         return arr;
       };
-      var metaArray = metaTags.reduce(getAttribs, []);
+      return { data: data };
+      // const metaArray = metaTags.reduce(getAttribs, []);
 
       // Create the return object and add the meta data.
       var returnData = { error: false };
@@ -52,6 +57,7 @@ var getOg = function getOg(obj, meta) {
   if (meta.property && meta.property.indexOf('og:') > -1) {
     obj['' + meta.property] = meta.content;
   }
+  obj.error = false;
   return obj;
 };
 
@@ -69,6 +75,7 @@ var getTwitter = function getTwitter(obj, meta) {
   if (meta.name && meta.name.indexOf('twitter:') > -1) {
     obj['' + meta.name] = meta.content;
   }
+  obj.error = false;
   return obj;
 };
 
