@@ -1,6 +1,6 @@
 {
   "name": "meta-scraper",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A utility for grabbing the meta tags from a web page.",
   "main": "build/index.js",
   "author": "John Hannah",
@@ -32,5 +32,8 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.4.0",
     "jest": "^20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
