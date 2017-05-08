@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.twitter = exports.og = exports.meta = undefined;
 
+var _keys = require('babel-runtime/core-js/object/keys');
+
+var _keys2 = _interopRequireDefault(_keys);
+
 var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -18,6 +22,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var meta = exports.meta = function meta(url) {
   // Get the specified URL
   return (0, _axios2.default)(url).then(function (data) {
+    console.log((0, _keys2.default)(data));
     try {
       // Make sure we got a valid response
       if (data.response === 'undefined') {
@@ -36,8 +41,7 @@ var meta = exports.meta = function meta(url) {
         }
         return arr;
       };
-      return { data: data };
-      // const metaArray = metaTags.reduce(getAttribs, []);
+      var metaArray = metaTags.reduce(getAttribs, []);
 
       // Create the return object and add the meta data.
       var returnData = { error: false };

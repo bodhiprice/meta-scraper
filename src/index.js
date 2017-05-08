@@ -5,6 +5,7 @@ export const meta = (url) => {
   // Get the specified URL
   return axios(url)
     .then(data => {
+      console.log(Object.keys(data));
       try {
         // Make sure we got a valid response
         if (data.response === 'undefined') {
@@ -21,8 +22,7 @@ export const meta = (url) => {
           }
           return arr;
         };
-        return {data};
-        // const metaArray = metaTags.reduce(getAttribs, []);
+        const metaArray = metaTags.reduce(getAttribs, []);
 
         // Create the return object and add the meta data.
         const returnData = { error: false };
@@ -80,4 +80,3 @@ const metaScraper = {
 }
 
 export default metaScraper;
-
