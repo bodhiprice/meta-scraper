@@ -6,6 +6,10 @@ export const meta = (url) => {
   return axios(url)
     .then(data => {
       try {
+        // Make sure we got a valid response
+        if (data.response === 'undefined') {
+          return { error: true, errorMessage: 'Did not receive a valid response. Please check URL and try again.' };
+        }
         // Load the return data into cheerio.
         const $ = cheerio.load(data.data);
         // Filter head tags so that we just have "meta".
@@ -17,7 +21,8 @@ export const meta = (url) => {
           }
           return arr;
         };
-        const metaArray = metaTags.reduce(getAttribs, []);
+        return {data};
+        // const metaArray = metaTags.reduce(getAttribs, []);
 
         // Create the return object and add the meta data.
         const returnData = { error: false };
@@ -37,6 +42,7 @@ const getOg = (obj, meta) => {
   if (meta.property && meta.property.indexOf('og:') > -1) {
     obj[`${meta.property}`] = meta.content;
   }
+  obj.error = false;
   return obj;
 };
 
@@ -54,6 +60,7 @@ const getTwitter = (obj, meta) => {
   if (meta.name && meta.name.indexOf('twitter:') > -1) {
     obj[`${meta.name}`] = meta.content;
   }
+  obj.error = false;
   return obj;
 };
 
