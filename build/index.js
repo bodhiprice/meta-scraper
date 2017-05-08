@@ -15,13 +15,16 @@ var _cheerio2 = _interopRequireDefault(_cheerio);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var genericError = { error: true, errorMessage: 'There has been an error. Please check the URL and try again.' };
+
 var meta = exports.meta = function meta(url) {
   return (0, _axios2.default)(url).then(function (data) {
+    // Make sure we got a valid response
+    if (data.response === 'undefined') {
+      return { error: true, errorMessage: 'Did not receive a valid response. Please check URL and try again.' };
+    }
+
     try {
-      // Make sure we got a valid response
-      if (data.response === 'undefined') {
-        return { error: true, errorMessage: 'Did not receive a valid response. Please check URL and try again.' };
-      }
       // Load the return data into cheerio.
       var $ = _cheerio2.default.load(data.data);
       // Filter head tags so that we just have "meta".
@@ -62,7 +65,10 @@ var getOg = function getOg(obj, tag) {
 // Return Open Graph tags as an object
 var og = exports.og = function og(url) {
   return meta(url).then(function (tags) {
-    return tags.meta.reduce(getOg, {});
+    if (tags.error === false) {
+      return tags.meta.reduce(getOg, {});
+    }
+    return genericError;
   }).catch(function (error) {
     return { error: true, errorMessage: error };
   });
@@ -80,7 +86,10 @@ var getTwitter = function getTwitter(obj, tag) {
 // Return Twitter tags as an object
 var twitter = exports.twitter = function twitter(url) {
   return meta(url).then(function (tags) {
-    return tags.meta.reduce(getTwitter, {});
+    if (tags.error === false) {
+      return tags.meta.reduce(getTwitter, {});
+    }
+    return genericError;
   }).catch(function (error) {
     return { error: true, errorMessage: error };
   });

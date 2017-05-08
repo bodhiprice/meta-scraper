@@ -1,14 +1,17 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
+const genericError = { error: true, errorMessage: 'There has been an error. Please check the URL and try again.' };
+
 export const meta = (url) => (
   axios(url)
     .then(data => {
+      // Make sure we got a valid response
+      if (data.response === 'undefined') {
+        return { error: true, errorMessage: 'Did not receive a valid response. Please check URL and try again.' };
+      }
+
       try {
-        // Make sure we got a valid response
-        if (data.response === 'undefined') {
-          return { error: true, errorMessage: 'Did not receive a valid response. Please check URL and try again.' };
-        }
         // Load the return data into cheerio.
         const $ = cheerio.load(data.data);
         // Filter head tags so that we just have "meta".
@@ -47,7 +50,12 @@ const getOg = (obj, tag) => {
 // Return Open Graph tags as an object
 export const og = (url) => (
   meta(url)
-    .then(tags => tags.meta.reduce(getOg, {}))
+    .then(tags => {
+      if (tags.error === false) {
+        return tags.meta.reduce(getOg, {});
+      }
+      return genericError;
+    })
     .catch(error => ({ error: true, errorMessage: error }))
 );
 
@@ -63,7 +71,12 @@ const getTwitter = (obj, tag) => {
 // Return Twitter tags as an object
 export const twitter = (url) => (
   meta(url)
-    .then(tags => tags.meta.reduce(getTwitter, {}))
+    .then(tags => {
+      if (tags.error === false) {
+        return tags.meta.reduce(getTwitter, {});
+      }
+      return genericError;
+    })
     .catch(error => ({ error: true, errorMessage: error }))
 );
 
