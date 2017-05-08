@@ -5,10 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.twitter = exports.og = exports.meta = undefined;
 
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
-
 var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -20,9 +16,7 @@ var _cheerio2 = _interopRequireDefault(_cheerio);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var meta = exports.meta = function meta(url) {
-  // Get the specified URL
   return (0, _axios2.default)(url).then(function (data) {
-    console.log((0, _keys2.default)(data));
     try {
       // Make sure we got a valid response
       if (data.response === 'undefined') {
@@ -35,9 +29,9 @@ var meta = exports.meta = function meta(url) {
         return item.name === 'meta';
       });
 
-      var getAttribs = function getAttribs(arr, meta) {
-        if (meta.attribs) {
-          arr.push(meta.attribs);
+      var getAttribs = function getAttribs(arr, tag) {
+        if (tag.attribs) {
+          arr.push(tag.attribs);
         }
         return arr;
       };
@@ -57,9 +51,9 @@ var meta = exports.meta = function meta(url) {
 };
 
 // Get only Open Graph tags and return as an object.
-var getOg = function getOg(obj, meta) {
-  if (meta.property && meta.property.indexOf('og:') > -1) {
-    obj['' + meta.property] = meta.content;
+var getOg = function getOg(obj, tag) {
+  if (tag.property && tag.property.indexOf('og:') > -1) {
+    obj['' + tag.property] = tag.content;
   }
   obj.error = false;
   return obj;
@@ -67,17 +61,17 @@ var getOg = function getOg(obj, meta) {
 
 // Return Open Graph tags as an object
 var og = exports.og = function og(url) {
-  return meta(url).then(function (meta) {
-    return meta.meta.reduce(getOg, {});
+  return meta(url).then(function (tags) {
+    return tags.meta.reduce(getOg, {});
   }).catch(function (error) {
     return { error: true, errorMessage: error };
   });
 };
 
 // Get only Twitter tags and return as an object.
-var getTwitter = function getTwitter(obj, meta) {
-  if (meta.name && meta.name.indexOf('twitter:') > -1) {
-    obj['' + meta.name] = meta.content;
+var getTwitter = function getTwitter(obj, tag) {
+  if (tag.name && tag.name.indexOf('twitter:') > -1) {
+    obj['' + tag.name] = tag.content;
   }
   obj.error = false;
   return obj;
@@ -85,8 +79,8 @@ var getTwitter = function getTwitter(obj, meta) {
 
 // Return Twitter tags as an object
 var twitter = exports.twitter = function twitter(url) {
-  return meta(url).then(function (meta) {
-    return meta.meta.reduce(getTwitter, {});
+  return meta(url).then(function (tags) {
+    return tags.meta.reduce(getTwitter, {});
   }).catch(function (error) {
     return { error: true, errorMessage: error };
   });
