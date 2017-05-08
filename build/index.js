@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.twitter = exports.Og = exports.meta = undefined;
+exports.twitter = exports.og = exports.meta = undefined;
 
 var _axios = require('axios');
 
@@ -56,9 +56,11 @@ var getOg = function getOg(obj, meta) {
 };
 
 // Return Open Graph tags as an object
-var Og = exports.Og = function Og(url) {
+var og = exports.og = function og(url) {
   return meta(url).then(function (meta) {
     return meta.meta.reduce(getOg, {});
+  }).catch(function (error) {
+    return { error: true, errorMessage: error };
   });
 };
 
@@ -70,19 +72,19 @@ var getTwitter = function getTwitter(obj, meta) {
   return obj;
 };
 
-// Return Open Graph tags as an object
+// Return Twitter tags as an object
 var twitter = exports.twitter = function twitter(url) {
   return meta(url).then(function (meta) {
     return meta.meta.reduce(getTwitter, {});
+  }).catch(function (error) {
+    return { error: true, errorMessage: error };
   });
 };
 
-exports.default = {
+var metaScraper = {
   meta: meta,
-  Og: Og
+  og: og,
+  twitter: twitter
 };
 
-
-twitter('https://lullabot.com').then(function (data) {
-  console.log(data);
-});
+exports.default = metaScraper;

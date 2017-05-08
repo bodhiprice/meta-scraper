@@ -57,7 +57,7 @@ const getTwitter = (obj, meta) => {
   return obj;
 };
 
-// Return Open Graph tags as an object
+// Return Twitter tags as an object
 export const twitter = (url) => {
   return meta(url)
     .then(meta => {
@@ -66,9 +66,11 @@ export const twitter = (url) => {
     .catch(error => ({ error: true, errorMessage: error }));
 }
 
-export default {
+const metaScraper = {
   meta,
   og,
   twitter
-};
+}
+
+export default metaScraper;
 
