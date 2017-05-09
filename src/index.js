@@ -17,7 +17,7 @@ const getTwitter = (obj, tag) => {
   return obj;
 };
 
-const metaScraper = (url) => (
+export default (url) => (
   axios(url)
     .then(data => {
       // Make sure we got a valid response
@@ -82,5 +82,3 @@ const metaScraper = (url) => (
     })
     .catch(error => ({ error: true, errorMessage: error }))
 );
-
-export default metaScraper;

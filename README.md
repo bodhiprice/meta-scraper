@@ -9,12 +9,13 @@ npm install meta-scraper --save
 ## Usage
 ```javascript
 // ES5 require
-const metaScraper = require('meta-scraper');
+const metaScraper = require('meta-scraper').default;
+// ES6 import
+import metaScraper from 'meta-scraper';
 
 // Returns a promise. 
-const getAllMeta = metaScraper('https://facebook.com');
-
-getAllMeta.then(function(data) {
+metaScraper('https://facebook.com')
+  .then(function(data) {
   console.log(data);
   /*
     { 
