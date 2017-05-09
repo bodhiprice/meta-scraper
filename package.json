@@ -23,11 +23,14 @@
     "test": "jest --coverage",
     "prepublish": "npm run build",
     "source": "babel-node src/index.js",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "precommit": "npm run lint",
+    "prepush": "npm run test"
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "cheerio": "^0.22.0"
+    "cheerio": "^0.22.0",
+    "husky": "^0.13.3"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
