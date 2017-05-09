@@ -1,9 +1,23 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 
-const genericError = { error: true, errorMessage: 'There has been an error. Please check the URL and try again.' };
+// Get only Open Graph tags and return as an object.
+const getOg = (obj, tag) => {
+  if (tag.property && tag.property.indexOf('og:') > -1) {
+    obj[`${tag.property.slice(3, tag.property.length)}`] = tag.content;
+  }
+  return obj;
+};
 
-export const meta = (url) => (
+// Get only Twitter tags and return as an object.
+const getTwitter = (obj, tag) => {
+  if (tag.name && tag.name.indexOf('twitter:') > -1) {
+    obj[`${tag.name.slice(8, tag.name.length)}`] = tag.content;
+  }
+  return obj;
+};
+
+const metaScraper = (url) => (
   axios(url)
     .then(data => {
       // Make sure we got a valid response
@@ -14,8 +28,12 @@ export const meta = (url) => (
       try {
         // Load the return data into cheerio.
         const $ = cheerio.load(data.data);
+        let allTags;
         // Filter head tags so that we just have "meta".
-        const metaTags = $('head')[0].children.filter(item => item.name === 'meta');
+        if ($('head')[0] && $('head')[0].children) {
+          allTags = $('head')[0].children.filter(item => item.name === 'meta');
+        }
+        else throw 'Did not receive a valid response. Please check URL and try again.';
 
         const getAttribs = (arr, tag) => {
           if (tag.attribs) {
@@ -23,12 +41,39 @@ export const meta = (url) => (
           }
           return arr;
         };
-        const metaArray = metaTags.reduce(getAttribs, []);
+        const metaArray = allTags.reduce(getAttribs, []);
 
         // Create the return object and add the meta data.
         const returnData = { error: false };
-        returnData.meta = metaArray;
+        returnData.allTags = metaArray;
+
+        // Add a proertry that has the processed Twitter data.
+        const twitter = metaArray.reduce(getTwitter, {});
+        returnData.twitter = Object.keys(twitter).length === 0 ? false : twitter;
+
+        // Add a property that has processed OG data.
+        const og = metaArray.reduce(getOg, {});
+        returnData.og = Object.keys(og).length === 0 ? false : og;
+
+        // Add page page title.
         returnData.pageTitle = $('title')[0].children[0].data;
+
+        // Add publications date if available.
+        const publishedTime = metaArray.filter(item => item.property && item.property === 'article:published_time');
+        returnData.pubDate = publishedTime.length > 0 ? publishedTime[0].content : returnData.og.pubdate ? returnData.og.pubdate : false;
+
+        // Add page title
+        returnData.title = returnData.og && returnData.og.title ? returnData.og.title : returnData.twitter && returnData.twitter.title ? returnData.twitter.title : returnData.pageTitle;
+
+        // Add description
+        const description = metaArray.filter(item => item.name && item.name === 'description')[0].content || false;
+        returnData.description = returnData.og && returnData.og.description ? returnData.og.description : returnData.twitter && returnData.twitter.description ? returnData.twitter.description : description;
+
+        // Add image
+        returnData.image = returnData.og && returnData.og.image ? returnData.og.image : returnData.twitter && returnData.twitter.image ? returnData.twitter.image : false;
+
+        returnData.error = false;
+
         return returnData;
       }
       catch (error) {
@@ -37,53 +82,5 @@ export const meta = (url) => (
     })
     .catch(error => ({ error: true, errorMessage: error }))
 );
-
-// Get only Open Graph tags and return as an object.
-const getOg = (obj, tag) => {
-  if (tag.property && tag.property.indexOf('og:') > -1) {
-    obj[`${tag.property}`] = tag.content;
-  }
-  obj.error = false;
-  return obj;
-};
-
-// Return Open Graph tags as an object
-export const og = (url) => (
-  meta(url)
-    .then(tags => {
-      if (tags.error === false) {
-        return tags.meta.reduce(getOg, {});
-      }
-      return genericError;
-    })
-    .catch(error => ({ error: true, errorMessage: error }))
-);
-
-// Get only Twitter tags and return as an object.
-const getTwitter = (obj, tag) => {
-  if (tag.name && tag.name.indexOf('twitter:') > -1) {
-    obj[`${tag.name}`] = tag.content;
-  }
-  obj.error = false;
-  return obj;
-};
-
-// Return Twitter tags as an object
-export const twitter = (url) => (
-  meta(url)
-    .then(tags => {
-      if (tags.error === false) {
-        return tags.meta.reduce(getTwitter, {});
-      }
-      return genericError;
-    })
-    .catch(error => ({ error: true, errorMessage: error }))
-);
-
-const metaScraper = {
-  meta,
-  og,
-  twitter
-};
 
 export default metaScraper;

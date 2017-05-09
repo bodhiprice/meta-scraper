@@ -16,7 +16,8 @@
     "no-var": 0,
     "radix": 0,
     "valid-jsdoc": 2,
-    "vars-on-top": 0
+    "vars-on-top": 0,
+    "no-throw-literal": 0
   },
   "parser": "babel-eslint"
 }
