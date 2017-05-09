@@ -56,7 +56,7 @@ const metaScraper = (url) => (
         returnData.og = Object.keys(og).length === 0 ? false : og;
 
         // Add page page title.
-        returnData.pageTitle = $('title')[0].children[0].data;
+        returnData.pageTitle = $('title')[0].children[0].data || false;
 
         // Add publications date if available.
         const publishedTime = metaArray.filter(item => item.property && item.property === 'article:published_time');

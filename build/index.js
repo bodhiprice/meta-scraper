@@ -73,7 +73,7 @@ var metaScraper = function metaScraper(url) {
       returnData.og = (0, _keys2.default)(og).length === 0 ? false : og;
 
       // Add page page title.
-      returnData.pageTitle = $('title')[0].children[0].data;
+      returnData.pageTitle = $('title')[0].children[0].data || false;
 
       // Add publications date if available.
       var publishedTime = metaArray.filter(function (item) {
