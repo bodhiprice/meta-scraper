@@ -43,6 +43,8 @@ There are a number properties that are provided along with reasonable fallbacks:
 - `description`: Tries to first get the Open Graph or Twitter card description and uses the meta description as a fallback. This will be `false` if none of those are present.
 - `pubDate`: Tries to use `article:published_time` first, then `og:pubdate` as a fallback. This is `false` if those aren't available.
 - `image`:  Tries to first get the Open Graph or Twitter card image. If those aren't available, this is `false`.
+- `og`: All available Open Graph tags. If those aren't available, this is `false`.
+- `twitter`: All available Twitter tags. If those aren't available, this is `false`.
 - `error`: If `error` is set to `true`, then there will be an additional property available, `errorMessage`, that will have the error message.
 - `allTags`: This is an array of objects. Each object contains the attributes for the meta tags and all of the page's meta tags should be available on this property.  Using `Array.filter()` would be a useful way to find any tags that aren't provided by default. See the example below.
 

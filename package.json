@@ -19,7 +19,7 @@
     "metatag scraping"
   ],
   "scripts": {
-    "build": "babel src -d build",
+    "build": "babel src --out-file index.js",
     "test": "jest --coverage",
     "prepublish": "npm run build",
     "source": "babel-node src/index.js",

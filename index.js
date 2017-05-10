@@ -34,7 +34,7 @@ var getTwitter = function getTwitter(obj, tag) {
   return obj;
 };
 
-exports.default = function (url) {
+var metaScraper = function metaScraper(url) {
   return (0, _axios2.default)(url).then(function (data) {
     // Make sure we got a valid response
     if (data.response === 'undefined') {
@@ -103,3 +103,5 @@ exports.default = function (url) {
     return { error: true, errorMessage: error };
   });
 };
+
+exports.default = metaScraper;
