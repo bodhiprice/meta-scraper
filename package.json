@@ -1,6 +1,6 @@
 {
   "name": "meta-scraper",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A utility for grabbing the meta tags from a web page.",
   "main": "build/index.js",
   "author": "John Hannah",
