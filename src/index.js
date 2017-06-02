@@ -1,5 +1,6 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+import keys from 'object-keys';
 
 // Get only Open Graph tags and return as an object.
 const getOg = (obj, tag) => {
@@ -49,11 +50,11 @@ const metaScraper = (url) => (
 
         // Add a proertry that has the processed Twitter data.
         const twitter = metaArray.reduce(getTwitter, {});
-        returnData.twitter = Object.keys(twitter).length === 0 ? false : twitter;
+        returnData.twitter = keys(twitter).length === 0 ? false : twitter;
 
         // Add a property that has processed OG data.
         const og = metaArray.reduce(getOg, {});
-        returnData.og = Object.keys(og).length === 0 ? false : og;
+        returnData.og = keys(og).length === 0 ? false : og;
 
         // Add page page title.
         returnData.pageTitle = $('title')[0].children[0].data || false;

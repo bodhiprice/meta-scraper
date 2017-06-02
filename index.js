@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
-
 var _axios = require('axios');
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -15,6 +11,10 @@ var _axios2 = _interopRequireDefault(_axios);
 var _cheerio = require('cheerio');
 
 var _cheerio2 = _interopRequireDefault(_cheerio);
+
+var _objectKeys = require('object-keys');
+
+var _objectKeys2 = _interopRequireDefault(_objectKeys);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66,11 +66,11 @@ var metaScraper = function metaScraper(url) {
 
       // Add a proertry that has the processed Twitter data.
       var twitter = metaArray.reduce(getTwitter, {});
-      returnData.twitter = (0, _keys2.default)(twitter).length === 0 ? false : twitter;
+      returnData.twitter = (0, _objectKeys2.default)(twitter).length === 0 ? false : twitter;
 
       // Add a property that has processed OG data.
       var og = metaArray.reduce(getOg, {});
-      returnData.og = (0, _keys2.default)(og).length === 0 ? false : og;
+      returnData.og = (0, _objectKeys2.default)(og).length === 0 ? false : og;
 
       // Add page page title.
       returnData.pageTitle = $('title')[0].children[0].data || false;
