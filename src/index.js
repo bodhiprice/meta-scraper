@@ -67,7 +67,8 @@ const metaScraper = (url) => (
         returnData.title = returnData.og && returnData.og.title ? returnData.og.title : returnData.twitter && returnData.twitter.title ? returnData.twitter.title : returnData.pageTitle;
 
         // Add description
-        const description = metaArray.filter(item => item.name && item.name === 'description')[0].content || false;
+        const descriptions = metaArray.filter(item => item.name && item.name === 'description');
+        const description = descriptions.length ? descriptions[0].content : false;
         returnData.description = returnData.og && returnData.og.description ? returnData.og.description : returnData.twitter && returnData.twitter.description ? returnData.twitter.description : description;
 
         // Add image
